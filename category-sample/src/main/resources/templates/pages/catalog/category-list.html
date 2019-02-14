@@ -1,0 +1,198 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+    <title>Category</title>
+    <link rel="stylesheet" th:href="@{/bootstrap-table/bootstrap-table.min.css}">
+
+    <script th:src="@{/bootstrap-table/bootstrap-table.min.js}"></script>
+    <script th:src="@{/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="content">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Category
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Category</a></li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div id="toolbar">
+                            <div class="form-inline" role="form">
+                                <div class="form-group">
+                                    <label for="keyword">关键字</label>
+                                    <input name="keyword" class="form-control" type="text" id="keyword">
+                                </div>
+                                <button id="searchBtn" type="submit" class="btn btn-primary" style="margin-left: 5px">
+                                    查询
+                                </button>
+                                <a href="/category/add">
+                                    <button id="createBtn" type="submit" class="btn btn-info" style="margin-left: 30px">
+                                        录入
+                                    </button>
+                                </a>
+                                <button id="deleteBtn" type="submit" class="btn btn-danger">删除</button>
+                            </div>
+                        </div>
+                        <table id="dataTable" class="table table-hover table-responsive"
+                               style="table-layout: fixed"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+    <script>
+        $('#dataTable').bootstrapTable({
+            method: 'get',
+            url: "/api/v1/categories/search",
+            toolbar: '#toolbar',
+            striped: true,
+            dataField: "data",
+            pageNumber: 1,
+            pagination: true,
+            queryParamsType: 'limit',
+            queryParams: queryParams,
+            sidePagination: 'server',
+            pageSize: 20,
+            pageList: [10, 20, 50, 100],
+            showRefresh: false,
+            clickToSelect: true,
+            toolbarAlign: 'left',
+            buttonsAlign: 'right',
+            toolbar: '#toolbar',
+            showColumns: true,
+            columns: [
+                {
+                    title: '全选',
+                    field: 'select',
+                    checkbox: true,
+                    width: 25,
+                    align: 'center',
+                },
+                {
+                    title: 'ID',
+                    field: 'id',
+                    visible: false,
+                    width: 160
+                },
+                {
+                    title: 'Edit',
+                    width: 50,
+                    formatter: function (value, row, index, field) {
+                        return [
+                            '<a class="edit ml10" href="javascript:void(0)" title="Edit">',
+                            '<i class="glyphicon glyphicon-edit"></i>',
+                            '</a>',
+                        ].join('');
+                    },
+                    events: {
+                        'click .edit': function (e, value, row, index) {
+                            window.location.href = '/category/edit?id' + row.id;
+                        }
+                    },
+                    align: 'center'
+                },
+                {
+                    title: 'Name',
+                    field: 'name',
+                    width: 160,
+                    align: 'center'
+                },
+                {
+                    title: 'Parent Category',
+                    field: 'parentCategory',
+                    width: 160,
+                    align: 'center'
+                },
+                {
+                    title: 'URL',
+                    field: 'url',
+                    width: 160,
+                    align: 'center'
+                },
+                {
+                    title: 'template',
+                    field: 'template',
+                    width: 160,
+                    align: 'center'
+                },
+                {
+                    title: 'Active',
+                    field: 'active',
+                    width: 160,
+                    formatter: function (value, row, index, field) {
+                        if (value) {
+                            return "Active";
+                        } else {
+                            return "Disabled";
+                        }
+                    },
+                    align: 'center'
+                },
+                {
+                    title: 'Begin Date',
+                    field: 'beginDate',
+                    width: 160,
+                    formatter: function (value, row, index, field) {
+                        if (value) {
+                            return format2Date(new Date(value), "yyyy-MM-dd hh:mm:ss");
+                        }
+                        return "";
+                    },
+                    align: 'center'
+                },
+                {
+                    title: 'End Date',
+                    field: 'endDate',
+                    width: 160,
+                    formatter: function (value, row, index, field) {
+                        if (value) {
+                            return format2Date(new Date(value), "yyyy-MM-dd hh:mm:ss");
+                        }
+                        return "";
+                    },
+                    align: 'center'
+                }
+            ],
+            locale: 'zh-CN',
+            responseHandler: function (data) {
+                return data;
+            }
+        });
+
+        function format2Date(date, fmt) {
+            var o = {
+                "M+": date.getMonth() + 1, // 月份
+                "d+": date.getDate(), // 日
+                "h+": date.getHours(), // 小时
+                "m+": date.getMinutes(), // 分
+                "s+": date.getSeconds(), // 秒
+                "q+": Math.floor((date.getMonth() + 3) / 3), // 季度
+                "S": date.getMilliseconds() // 毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+
+        function queryParams(params) {
+            return {
+                pageSize: params.limit,
+                pageNum: params.offset / params.limit + 1,
+                keyword: $('#keyword').val()
+            }
+        }
+    </script>
+</div>
+</body>

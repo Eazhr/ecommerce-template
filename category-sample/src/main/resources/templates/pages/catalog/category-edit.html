@@ -1,0 +1,133 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+    <title>Category - Edit</title>
+    <link rel="stylesheet"
+          th:href="@{/adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}"/>
+    <script th:src="@{/adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/adminlte/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+    <script th:src="@{/jquery-validate/jquery.validate.min.js}"></script>
+    <script th:src="@{/jquery-validate/additional-methods.min.js}"></script>
+    <script th:src="@{/jquery-validate/localization/messages_zh.js}"></script>
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="content">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Category - Edit
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Category</a></li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <form role="form" id="categoryForm">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="name">Name: </label>
+                                        <input type="text" class="form-control" id="name" name="name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="parentCategory">Parent Category: </label>
+                                        <input type="text" class="form-control" id="parentCategory"
+                                               name="parentCategory">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="url">URL: </label>
+                                        <input type="text" class="form-control" id="url" name="url">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="template">template: </label>
+                                        <input type="text" class="form-control" id="template" name="template">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="beginDate">Begin Date: </label>
+                                        <input type="text" class="form-control" id="beginDate" name="beginDate"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="endDate">End Date: </label>
+                                        <input type="text" class="form-control" id="endDate" name="endDate" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Active</label>
+                                        <select class="form-control" id="active" name="active">
+                                            <option value="true">Yes!</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        $(function () {
+            $('#beginDate').datepicker({format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: true});
+            $('#endDate').datepicker({format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: true});
+
+            $('#categoryForm').validate({
+                rules: {
+                    name: {
+                        required: true,
+                        maxlength: 80,
+                    },
+                    active: {
+                        required: true
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').addClass('has-error');
+                },
+                success: function (element) {
+                    element.closest('.form-group').removeClass('has-error');
+                    $(element).closest('.error').remove();
+                },
+                errorPlacement: function (error, element) {
+                    if (element.parent('.input-group').length) {
+                        error.insertAfter(element.parent());
+                    } else if (element.hasClass('select2') || element.hasClass('select2-hidden-accessible')) {
+                        error.insertAfter(element.next('span'));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

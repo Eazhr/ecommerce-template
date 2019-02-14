@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce_sample?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: admin
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  config-location:
+  #Domain Classes Package
+  type-aliases-package: com.sdata.ecommerce.domain
+  #Mapper Locations
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+
+# Pagination
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
