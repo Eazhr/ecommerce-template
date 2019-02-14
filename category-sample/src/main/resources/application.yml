@@ -4,13 +4,17 @@ spring:
     username: root
     password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5 #Minimal idle connection
+      maximum-pool-size: 10 #Max connection num
+      pool-name: ecommerce-pool #pool name
+      connection-timeout: 30000 #connection timeout
+
+
 
 mybatis:
-  config-location:
-  #Domain Classes Package
-  type-aliases-package: com.sdata.ecommerce.domain
-  #Mapper Locations
-  mapper-locations: classpath:/mybatis/mapper/*.xml
+  type-aliases-package: com.sdata.ecommerce.domain #Domain Classes Package
+  mapper-locations: classpath:/mybatis/mapper/*.xml #Mapper Locations
 
 # Pagination
 pagehelper:
