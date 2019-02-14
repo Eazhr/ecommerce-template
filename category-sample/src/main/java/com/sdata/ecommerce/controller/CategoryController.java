@@ -5,6 +5,7 @@ import com.sdata.ecommerce.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/category")
-public class CategoryController {
+public class CategoryController extends BaseController {
     private static final String PAGE_DIR = "/pages";
     private static final String CATEGORY_LIST_PAGE = PAGE_DIR + "/catalog/category-list";
     private static final String CATEGORY_EDIT_PAGE = PAGE_DIR + "/catalog/category-edit";
@@ -40,5 +41,12 @@ public class CategoryController {
     public String addPage(ModelMap model) {
         model.addAttribute("category", new Category());
         return CATEGORY_EDIT_PAGE;
+    }
+
+    @PostMapping
+    public String saveOrUpdate(Category category) {
+        categoryService.saveOrUpdateCategory(category);
+
+        return CATEGORY_LIST_PAGE;
     }
 }

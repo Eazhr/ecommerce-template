@@ -29,7 +29,7 @@
                         <div id="toolbar">
                             <div class="form-inline" role="form">
                                 <div class="form-group">
-                                    <label for="keyword">关键字</label>
+                                    <label for="keyword">Keyword: </label>
                                     <input name="keyword" class="form-control" type="text" id="keyword">
                                 </div>
                                 <button id="searchBtn" type="submit" class="btn btn-primary" style="margin-left: 5px">
@@ -145,7 +145,7 @@
                     width: 160,
                     formatter: function (value, row, index, field) {
                         if (value) {
-                            return format2Date(new Date(value), "yyyy-MM-dd hh:mm:ss");
+                            return format2Date(new Date(value), "yyyy-MM-dd");
                         }
                         return "";
                     },
