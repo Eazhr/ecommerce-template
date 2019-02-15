@@ -1,5 +1,6 @@
 package com.sdata.ecommerce.service;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sdata.ecommerce.api.category.SearchCategoryRequest;
 import com.sdata.ecommerce.api.category.SearchCategoryResponse;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.sdata.ecommerce.util.PageUtils.totalPages;
 
 /**
  * @author nedli
@@ -41,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         List<Category> categories = categoryMapper.selectByExample(example);
 
-        return new SearchCategoryResponse(categories, totalPages(categories));
+        return new SearchCategoryResponse(categories, ((Page) (categories)).getTotal());
     }
 
     @Override
