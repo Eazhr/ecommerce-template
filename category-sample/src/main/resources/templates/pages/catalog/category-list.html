@@ -193,6 +193,20 @@
                 keyword: $('#keyword').val()
             }
         }
+
+        $("#deleteBtn").click(function () {
+            var selects = $('#dataTable').bootstrapTable('getSelections');
+            console.log(selects);
+        })
+
+        $("#deleteBtn").click(function () {
+            var selects = $('#dataTable').bootstrapTable('getSelections');
+            console.log(selects);
+        });
+
+        $("#searchBtn").click(function () {
+            $('#dataTable').bootstrapTable('refresh');
+        });
     </script>
 </div>
 </body>
