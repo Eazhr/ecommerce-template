@@ -33,9 +33,14 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
+        <table schema="ecommerce_sample" tableName="sdata_category" domainObjectName="Category">
+            <property name="constructorBased" value="true"/>
+            <generatedKey column="id" sqlStatement="select uuid_short()" identity="false"/>
+        </table>
+
         <table schema="ecommerce_sample" tableName="sdata_product" domainObjectName="Product">
-            <property name="rootInterface" value="com.sdata.ecommerce.mapper.extened.ProductMapperExtended"/>
-            <property name="rootClass" value="com.sdata.ecommerce.domain.extened.ProductExtended"/>
+            <property name="rootInterface" value="com.sdata.ecommerce.mapper.extended.ProductMapperExtended"/>
+            <property name="rootClass" value="com.sdata.ecommerce.domain.extended.ProductExtended"/>
             <generatedKey column="id" sqlStatement="select uuid_short()" identity="false"/>
             <columnOverride column="description" javaType="java.lang.String"></columnOverride>
         </table>

@@ -1,4 +1,4 @@
-package com.sdata.ecommerce.mapper.extened;
+package com.sdata.ecommerce.mapper.extended;
 
 import com.sdata.ecommerce.domain.Product;
 

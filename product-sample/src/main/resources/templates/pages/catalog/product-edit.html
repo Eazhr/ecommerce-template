@@ -5,11 +5,28 @@
     <title>Product - Edit</title>
     <link rel="stylesheet"
           th:href="@{/adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}"/>
-    <script th:src="@{/adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
-    <script th:src="@{/adminlte/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/bootstrap-table/bootstrap-table.min.css}">
+    <!--Jquery validator-->
     <script th:src="@{/jquery-validate/jquery.validate.min.js}"></script>
     <script th:src="@{/jquery-validate/additional-methods.min.js}"></script>
     <script th:src="@{/jquery-validate/localization/messages_zh.js}"></script>
+
+    <!--Bootstrap Tables-->
+    <script th:src="@{/bootstrap-table/bootstrap-table.min.js}"></script>
+    <script th:src="@{/bootstrap-table/locale/bootstrap-table-zh-CN.js}"></script>
+
+    <!--Date picker-->
+    <script th:src="@{/adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+    <script th:src="@{/adminlte/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js}"></script>
+
+    <!--CK editor-->
+    <script th:src="@{/adminlte/bower_components/ckeditor/ckeditor.js}"></script>
+
+    <!-- Select2 -->
+    <link th:href="@{/select2/select2.min.css}" rel="stylesheet"/>
+    <link th:href="@{/select2/select2-bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/select2/select2-boostrap-custom.css}" rel="stylesheet"/>
+    <script th:src="@{/select2/select2.min.js}"></script>
 </head>
 <body>
 <div class="content-wrapper" layout:fragment="content">
@@ -31,75 +48,205 @@
                     <form role="form" id="productForm" th:object="${product}" th:action="@{/product}"
                           method="POST"
                           enctype="multipart/form-data">
+                        <input type="hidden" class="form-control" id="id" name="id" th:field="*{id}">
                         <div class="box-body">
-                            <div class="nav-tabs-custom">
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Tab 1</a></li>
-                                    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Tab 2</a></li>
-                                    <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Tab 3</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tab_1">
-                                        <b>How to use:</b>
-
-                                        <p>Exactly like the original bootstrap tabs except you should use
-                                            the custom wrapper <code>.nav-tabs-custom</code> to achieve this style.</p>
-                                        A wonderful serenity has taken possession of my entire soul,
-                                        like these sweet mornings of spring which I enjoy with my whole heart.
-                                        I am alone, and feel the charm of existence in this spot,
-                                        which was created for the bliss of souls like mine. I am so happy,
-                                        my dear friend, so absorbed in the exquisite sense of mere tranquil existence,
-                                        that I neglect my talents. I should be incapable of drawing a single stroke
-                                        at the present moment; and yet I feel that I never was a greater artist than now.
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">商品名字: </label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               th:field="*{name}">
                                     </div>
-                                    <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="tab_2">
-                                        The European languages are members of the same family. Their separate existence is a myth.
-                                        For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
-                                        in their grammar, their pronunciation and their most common words. Everyone realizes why a
-                                        new common language would be desirable: one could refuse to pay expensive translators. To
-                                        achieve this, it would be necessary to have uniform grammar, pronunciation and more common
-                                        words. If several languages coalesce, the grammar of the resulting language is more simple
-                                        and regular than that of the individual languages.
-                                    </div>
-                                    <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="tab_3">
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                        when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                        It has survived not only five centuries, but also the leap into electronic typesetting,
-                                        remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                                        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                                        like Aldus PageMaker including versions of Lorem Ipsum.
-                                    </div>
-                                    <!-- /.tab-pane -->
                                 </div>
-                                <!-- /.tab-content -->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">父类别(弹出层): </label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="parentCategoryName" disabled>
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-info btn-flat" data-toggle="modal"
+                                                        data-target="#categoryModal">选择</button>
+                                            </span>
+                                        </div>
+                                        <input type="hidden" class="form-control" id="parentCategory"
+                                               name="parentCategory" th:field="*{parentCategory}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">父类别 (select2): </label>
+                                        <select class="form-control" id="parentCategorySelect2"
+                                                name="parentCategorySelect2">
+                                            <option value="">请选择</option>
+                                            <option th:each="category : ${categories}"
+                                                    th:value="${category.id}"
+                                                    th:utext="${category.name}"/>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">生效开始时间: </label>
+                                        <input type="text" class="form-control" id="activeBeginDate"
+                                               name="activeBeginDate"
+                                               th:field="*{activeBeginDate}" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>描述</label>
+                                        <textarea class="form-control" rows="8" placeholder="" id="description"
+                                                  name="description" th:utext="*{description}"></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="/category">
-                                <button type="button" class="btn btn-info">Back</button>
+                            <button type="submit" class="btn btn-primary">提交</button>
+                            <a href="/product">
+                                <button type="button" class="btn btn-info">返回</button>
                             </a>
                         </div>
                     </form>
+                </div>
+                <div class="modal fade" tabindex="-1" role="dialog" id="categoryModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">选择类别</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="toolbar">
+                                    <div class="form-inline" role="form">
+                                        <div class="form-group">
+                                            <label for="keyword">关键词搜索: </label>
+                                            <input name="keyword" class="form-control" type="text" id="keyword">
+                                        </div>
+                                        <button id="searchBtn" type="submit" class="btn btn-primary"
+                                                style="margin-left: 5px">
+                                            查询
+                                        </button>
+                                    </div>
+                                </div>
+                                <table id="categoryDataTable" class="table table-hover table-responsive"
+                                       style="table-layout: fixed"></table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" id="categorySelect">选择</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
     <script>
         $(function () {
-            $('#beginDate').datepicker({format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: true});
-            $('#endDate').datepicker({format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: true});
 
-            $('#categoryForm').validate({
+            $('#categoryModal').on('shown.bs.modal', function () {
+                $("#categoryModal #keyword").val("");
+                $("#categoryDataTable").bootstrapTable('destroy');
+                $('#categoryDataTable').bootstrapTable({
+                    method: 'get',
+                    url: "/api/v1/categories/search",
+                    toolbar: '#toolbar',
+                    striped: true,
+                    dataField: "data",
+                    pageNumber: 1,
+                    pagination: true,
+                    queryParamsType: 'limit',
+                    queryParams: queryParams,
+                    sidePagination: 'server',
+                    pageSize: 20,
+                    pageList: [10, 20, 50, 100],
+                    showRefresh: false,
+                    clickToSelect: true,
+                    singleSelect: true,
+                    toolbarAlign: 'left',
+                    buttonsAlign: 'right',
+                    toolbar: '#toolbar',
+                    showColumns: true,
+                    columns: [
+                        {
+                            title: '全选',
+                            field: 'select',
+                            checkbox: true,
+                            width: 25,
+                            align: 'center',
+                        },
+                        {
+                            title: 'ID',
+                            field: 'id',
+                            visible: true,
+                            width: 160
+                        },
+                        {
+                            title: 'Name',
+                            field: 'name',
+                            width: 160,
+                            align: 'center'
+                        },
+                        {
+                            title: 'URL',
+                            field: 'url',
+                            width: 160,
+                            align: 'center'
+                        }
+                    ],
+                    locale: 'zh-CN',
+                    responseHandler: function (data) {
+                        return data;
+                    }
+                });
+
+                function queryParams(params) {
+                    return {
+                        pageSize: params.limit,
+                        pageNum: params.offset / params.limit + 1,
+                        keyword: $('#keyword').val()
+                    }
+                }
+            });
+
+            $("#categoryModal #searchBtn").click(function () {
+                $('#categoryDataTable').bootstrapTable('refresh');
+            });
+
+            $("#categorySelect").click(function () {
+                var $selects = $('#categoryDataTable').bootstrapTable('getSelections');
+                if ($selects.length > 0) {
+                    var $select = $selects[0];
+                    $("#parentCategory").val($select.id);
+                    $("#parentCategoryName").val($select.id + ":" + $select.name);
+                    $('#categoryModal').modal('hide');
+                } else {
+                    $.alert({
+                        title: '提醒',
+                        content: '请选择一条记录'
+                    });
+                }
+            });
+
+            $('#productForm').validate({
+                ignore: [],
                 rules: {
                     name: {
-                        required: true,
-                        maxlength: 80,
+                        required: true
+                    },
+                    parentCategory: {
+                        required: true
                     },
                     active: {
                         required: true
@@ -121,6 +268,16 @@
                         error.insertAfter(element);
                     }
                 }
+            });
+
+            $('#activeBeginDate').datepicker({format: 'yyyy-mm-dd', language: 'zh-CN', autoclose: true});
+
+            CKEDITOR.replace('description');
+
+            $("#parentCategorySelect2").select2({
+                theme: "bootstrap",
+                dropdownAutoWidth: 'true',
+                tags: false
             });
         });
     </script>
