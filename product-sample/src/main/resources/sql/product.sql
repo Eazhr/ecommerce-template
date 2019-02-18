@@ -48,7 +48,10 @@ DROP TABLE IF EXISTS sdata_sku;
 CREATE TABLE sdata_sku (
   id       VARCHAR(30) COMMENT '主键，UUID_SHORT()生成' PRIMARY KEY,
   name     VARCHAR(80) COMMENT 'SKU名字' NOT NULL,
-  keywords VARCHAR(200) COMMENT '商品关键字'
+  keywords VARCHAR(200) COMMENT '商品关键字',
+  active_begin_date VARCHAR(30) COMMENT '生效开始时间',
+  active_end_date   VARCHAR(30) COMMENT '生效结束时间',
+  active            BOOLEAN COMMENT '是否启用'
 );
 
 DROP TABLE IF EXISTS sdata_sku_option_value;
@@ -56,10 +59,7 @@ CREATE TABLE sdata_sku_option_value (
   id                VARCHAR(30) COMMENT '主键，UUID_SHORT()生成' PRIMARY KEY,
   sku_id            VARCHAR(30) COMMENT 'sku id' NOT NULL,
   option_id         VARCHAR(30) COMMENT '选项ID'   NOT NULL,
-  option_value      VARCHAR(60) COMMENT '选项值'    NOT NULL,
-  active_begin_date VARCHAR(30) COMMENT '生效开始时间',
-  active_end_date   VARCHAR(30) COMMENT '生效结束时间',
-  active            BOOLEAN COMMENT '是否启用'
+  option_value      VARCHAR(60) COMMENT '选项值'    NOT NULL
 );
 
 # Constraint Definitions
