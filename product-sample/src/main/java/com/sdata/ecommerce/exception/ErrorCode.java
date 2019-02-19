@@ -11,6 +11,7 @@ public class ErrorCode {
     public static ErrorCode HTTP_CODE_INVALID = new ErrorCode("E00004", "response http code invalid", 500);
     public static ErrorCode INVALID_REQUEST = new ErrorCode("E00005", "Bind error", 400);
     public static ErrorCode DATABASE_ERROR = new ErrorCode("E00006", "database error", 500);
+    public static ErrorCode UPLOAD_FAILED = new ErrorCode("E00007", "upload file failed", 500);
 
     /**
      * code

@@ -19,9 +19,26 @@ spring:
       idle-timeout: 600000
       # SQL 客户端从连接池中获取连接的超时时间，如果超时，将会抛出SQLException
       connection-timeout: 30000
+  servlet:
+      multipart:
+        max-file-size: 100MB
+        max-request-size: 100MB
 
 mybatis:
   # Domain 类路径
   type-aliases-package: com.sdata.ecommerce.domain
   # Mapper XML 路径
   mapper-locations: classpath:/mybatis/mapper/*.xml, classpath:/mybatis/mapper/extended/*.xml
+
+fdfs:
+  # 读取超时
+  so-timeout: 1500
+  # 连接超时
+  connect-timeout: 1000
+  # 缩略图参数
+  thumb-image:
+    width: 150
+    height: 150
+  # tracker 列表
+  tracker-list:
+    192.168.99.167:22122

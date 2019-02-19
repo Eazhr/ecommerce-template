@@ -44,5 +44,10 @@
             <generatedKey column="id" sqlStatement="select uuid_short()" identity="false"/>
             <columnOverride column="description" javaType="java.lang.String"></columnOverride>
         </table>
+
+        <table schema="ecommerce_sample" tableName="product_image" domainObjectName="ProductImage">
+            <property name="constructorBased" value="true"/>
+            <generatedKey column="id" sqlStatement="select uuid_short()" identity="false"/>
+        </table>
     </context>
 </generatorConfiguration>
