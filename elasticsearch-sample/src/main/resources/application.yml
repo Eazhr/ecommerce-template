@@ -1,0 +1,4 @@
+elastic:
+  cluster-name: dev.hotel.docker-cluster
+  seeds: 192.168.101.67:9200
+  maxRetryTimeoutMillis: 20000
