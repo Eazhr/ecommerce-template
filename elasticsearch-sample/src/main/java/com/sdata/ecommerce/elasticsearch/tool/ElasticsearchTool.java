@@ -5,8 +5,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -49,14 +52,35 @@ public class ElasticsearchTool {
         }
     }
 
-    public void index(String indexName) {
+    public void createIndex(String indexName, String source) {
         CreateIndexRequest request = new CreateIndexRequest(indexName);
-        request.source("", XContentType.JSON);
+        request.source(source, XContentType.JSON);
         try {
             client.indices().create(request, RequestOptions.DEFAULT);
         } catch (IOException e) {
             logger.error("Elastic search create index exception. {}", e);
             throw new RuntimeException("Es create index failed.");
+        }
+    }
+
+    public void insertDocument(String indexName, Object document) {
+        IndexRequest request = new IndexRequest(indexName);
+        try {
+            request.source(mapper().writeValueAsString(document));
+            IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            logger.error("Elastic search index document met io exception. {}", e);
+            throw new RuntimeException("index document failed");
+        }
+    }
+
+    public void deleteDocument(String indexName, String id) {
+        DeleteRequest request = new DeleteRequest(indexName, "_doc", id);
+        try {
+            client.delete(request, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            logger.error("Elastic search delete document met io exception. {}", e);
+            throw new RuntimeException("delete document failed");
         }
     }
 
